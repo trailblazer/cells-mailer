@@ -1,6 +1,6 @@
-require "cells/mailer/version"
+require "cell/mailer/version"
 
-module Cells
+module Cell
   module Mailer
     # Your code goes here...
   end

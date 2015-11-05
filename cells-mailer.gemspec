@@ -1,11 +1,11 @@
 # coding: utf-8
 lib = File.expand_path('../lib', __FILE__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
-require 'cells/mailer/version'
+require 'cell/mailer/version'
 
 Gem::Specification.new do |spec|
   spec.name          = "cells-mailer"
-  spec.version       = Cells::Mailer::VERSION
+  spec.version       = Cell::Mailer::VERSION
   spec.authors       = ["Timo Schilling"]
   spec.email         = ["timo@schilling.io"]
 
