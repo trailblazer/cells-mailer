@@ -1,8 +1,6 @@
 # Cells::Mailer
 
-Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/cells/mailer`. To experiment with that code, run `bin/console` for an interactive prompt.
-
-TODO: Delete this and the text above, and describe your gem
+Provides mail functionality for [Cells](https://github.com/apotonick/cells/).
 
 ## Installation
 
@@ -16,21 +14,30 @@ And then execute:
 
     $ bundle
 
-Or install it yourself as:
+## Configuration
 
-    $ gem install cells-mailer
+Cells::Mailer don't provide any own configuration at the moment. 
+Please take a look at the [mail](https://github.com/mikel/mail) gem for any configuration options.
 
 ## Usage
 
-TODO: Write usage instructions here
+```ruby
+class UserNotificationCell < Cell::ViewModel
+  include Cell::Mailer
+  property :user_name
 
-## Development
+  def show
+    "Hello #{user_name}"
+  end
+end
 
-After checking out the repo, run `bin/setup` to install dependencies. Then, run `rake spec` to run the tests. You can also run `bin/console` for an interactive prompt that will allow you to experiment.
+UserNotificationCell.(user).deliver(from: "foo@example.com", to: user.email, subject: "Hello")
+```
 
-To install this gem onto your local machine, run `bundle exec rake install`. To release a new version, update the version number in `version.rb`, and then run `bundle exec rake release`, which will create a git tag for the version, push git commits and tags, and push the `.gem` file to [rubygems.org](https://rubygems.org).
+## Roadmap
 
-## Contributing
-
-Bug reports and pull requests are welcome on GitHub at https://github.com/[USERNAME]/cells-mailer.
-
+- Allow instand methods as source for
+  - `from`
+  - `to`
+  - `subject`
+- Provide class level `mail` delivery configurations
