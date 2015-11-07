@@ -6,6 +6,10 @@ class MailerCell < Cell::ViewModel
   def show
     "body"
   end
+
+  def different_body
+    "a different body"
+  end
 end
 
 RSpec.describe Cell::Mailer do
@@ -21,5 +25,10 @@ RSpec.describe Cell::Mailer do
     expect(mail.to).to eq ["bar@example.org"]
     expect(mail.subject).to eq "example"
     expect(mail.body.raw_source).to eq "body"
+  end
+
+  it "allows passing in a body string" do
+    cell.deliver(options.merge(body: "custom body"))
+    expect(mail.body.raw_source).to eq "custom body"
   end
 end

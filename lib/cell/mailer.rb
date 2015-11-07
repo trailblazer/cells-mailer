@@ -13,7 +13,7 @@ module Cell
 
     def process_mail_options(options)
       state = options.delete(:method) || :show
-      options[:body] = call(state)
+      options[:body] ||= call(state)
       options
     end
   end

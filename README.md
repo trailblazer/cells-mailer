@@ -48,7 +48,13 @@ class UserNotificationCell < Cell::ViewModel
   end
 end
 
-UserNotificationCell.(user).deliver(from: "...", to: "...", subject: "...", method: :welcome)
+UserNotificationCell.(user).deliver(..., method: :welcome)
+```
+
+I don't know why you should use it, but you can also pass in a body as argument.
+
+```ruby
+UserNotificationCell.(user).deliver(..., body: "Hello user")
 ```
 
 ## Roadmap
