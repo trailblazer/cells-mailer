@@ -13,6 +13,7 @@ module Cell
 
     def process_mail_options(options)
       state = options.delete(:method) || :show
+      options[:subject] = send(options[:subject]) if options[:subject].is_a? Symbol
       options[:body] ||= call(state)
       options
     end

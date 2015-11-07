@@ -12,6 +12,10 @@ class MailerCell < Cell::ViewModel
   def different_body
     "a different body"
   end
+
+  def instance_subject
+    "Hello #{name}!"
+  end
 end
 
 RSpec.describe Cell::Mailer do
@@ -38,5 +42,10 @@ RSpec.describe Cell::Mailer do
   it "allows a different body method" do
     cell.deliver(options.merge(method: :different_body))
     expect(mail.body.raw_source).to eq "a different body"
+  end
+
+  it "allows using a instance method for the subject" do
+    cell.deliver(options.merge(subject: :instance_subject))
+    expect(mail.subject).to eq "Hello Nick!"
   end
 end
