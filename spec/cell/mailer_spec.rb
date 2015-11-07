@@ -68,4 +68,10 @@ RSpec.describe Cell::Mailer do
       cell.deliver(options.merge(method: :a_method, body: "a body"))
     }.to raise_exception ArgumentError, "You can't pass in `:method` and `:body` at once!"
   end
+
+  it "deliver options are optional" do
+    mailer = double(deliver: true)
+    expect(Mail).to receive(:new).with(kind_of(Hash)).and_return(mailer)
+    cell.deliver
+  end
 end

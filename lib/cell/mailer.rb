@@ -4,7 +4,7 @@ require "mail"
 
 module Cell
   module Mailer
-    def deliver(options)
+    def deliver(options = {})
       mail = Mail.new process_mail_options(options)
       mail.deliver
     end
