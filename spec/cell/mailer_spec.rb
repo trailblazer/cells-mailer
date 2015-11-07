@@ -90,14 +90,14 @@ RSpec.describe Cell::Mailer do
   end
 
   it "use class level settings" do
-    MailerCellWithConfig.new(nil).deliver
+    MailerCellWithConfig.(nil).deliver
     expect(mail.to).to eq ["nick@trailblazer.to"]
     expect(mail.from).to eq ["timo@schilling.io"]
     expect(mail.subject).to eq "you are a cool!"
   end
 
   it "use class level settings only if no instance setting is present" do
-    MailerCellWithConfig.new(nil).deliver(to: "nick@apotomo.de")
+    MailerCellWithConfig.(nil).deliver(to: "nick@apotomo.de")
     expect(mail.to).to eq ["nick@apotomo.de"]
     expect(mail.from).to eq ["timo@schilling.io"]
     expect(mail.subject).to eq "you are a cool!"
