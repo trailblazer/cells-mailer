@@ -40,4 +40,8 @@ UserNotificationCell.(user).deliver(from: "foo@example.com", to: user.email, sub
   - `from`
   - `to`
   - `subject`
+- Allow class level configurations for
+  - `from`
+  - `to`
+  - `subject`
 - Provide class level `mail` delivery configurations
