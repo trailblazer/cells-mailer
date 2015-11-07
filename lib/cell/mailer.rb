@@ -5,10 +5,16 @@ require "mail"
 module Cell
   module Mailer
     def deliver(options)
+      mail = Mail.new process_mail_options(options)
+      mail.deliver
+    end
+
+    private
+
+    def process_mail_options(options)
       state = options.delete(:method) || :show
       options[:body] = call(state)
-      mail = Mail.new options
-      mail.deliver
+      options
     end
   end
 end
