@@ -15,11 +15,14 @@ module Cell
       if options[:body] && options[:method]
         raise ArgumentError, "You can't pass in `:method` and `:body` at once!"
       end
-      state = options.delete(:method) || :show
+
       [:to, :subject, :from].each do |field|
         options[field] = send(options[field]) if options[field].is_a? Symbol
       end
+
+      state = options.delete(:method) || :show
       options[:body] ||= call(state)
+
       options
     end
   end
