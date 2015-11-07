@@ -1,7 +1,23 @@
 require 'spec_helper'
 
-describe Cell::Mailer do
-  it 'has a version number' do
-    expect(Cell::Mailer::VERSION).not_to be nil
+class MailerCell < Cell::ViewModel
+  include Cell::Mailer
+
+  def show
+    "body"
+  end
+end
+
+RSpec.describe Cell::Mailer do
+  subject(:cell) { MailerCell.(nil) }
+
+  it "delivers a Mail" do
+    cell.deliver(from: "foo@example.org", to: "bar@example.org", subject: "example")
+    expect(Mail::TestMailer.deliveries.count).to eq 1
+    mail = Mail::TestMailer.deliveries.first
+    expect(mail.from).to eq ["foo@example.org"]
+    expect(mail.to).to eq ["bar@example.org"]
+    expect(mail.subject).to eq "example"
+    expect(mail.body.raw_source).to eq "body"
   end
 end
