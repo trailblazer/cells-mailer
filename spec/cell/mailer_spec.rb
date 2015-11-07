@@ -31,4 +31,9 @@ RSpec.describe Cell::Mailer do
     cell.deliver(options.merge(body: "custom body"))
     expect(mail.body.raw_source).to eq "custom body"
   end
+
+  it "allows a different body method" do
+    cell.deliver(options.merge(method: :different_body))
+    expect(mail.body.raw_source).to eq "a different body"
+  end
 end
