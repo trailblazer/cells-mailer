@@ -17,7 +17,7 @@ class MailerCell < Cell::ViewModel
     "Hello #{name}!"
   end
 
-  def instance_to
+  def instance_email
     email
   end
 end
@@ -54,7 +54,12 @@ RSpec.describe Cell::Mailer do
   end
 
   it "allows using a instance method for the to field" do
-    cell.deliver(options.merge(to: :instance_to))
+    cell.deliver(options.merge(to: :instance_email))
     expect(mail.to).to eq ["nick@trailblazer.to"]
+  end
+
+  it "allows using a instance method for the from field" do
+    cell.deliver(options.merge(from: :instance_email))
+    expect(mail.from).to eq ["nick@trailblazer.to"]
   end
 end

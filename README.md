@@ -63,6 +63,4 @@ UserNotificationCell.(user).deliver(..., body: "Hello user")
   - `from`
   - `to`
   - `subject`
-- Allow class level configurations for
-  - `from`
 - Provide class level `mail` delivery configurations
