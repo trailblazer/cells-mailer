@@ -2,6 +2,8 @@ require 'spec_helper'
 
 class MailerCell < Cell::ViewModel
   include Cell::Mailer
+  property :name
+  property :email
 
   def show
     "body"
@@ -13,10 +15,11 @@ class MailerCell < Cell::ViewModel
 end
 
 RSpec.describe Cell::Mailer do
-  subject(:cell) { MailerCell.(nil) }
+  subject(:cell) { MailerCell.(user) }
   subject(:mail) { Mail::TestMailer.deliveries.first }
 
   let(:options) { { from: "foo@example.org", to: "bar@example.org", subject: "example" } }
+  let(:user) { OpenStruct.new email: "nick@trailblazer.to", name: "Nick" }
 
   it "delivers a Mail" do
     cell.deliver(options)
