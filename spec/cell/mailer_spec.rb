@@ -11,8 +11,10 @@ end
 RSpec.describe Cell::Mailer do
   subject(:cell) { MailerCell.(nil) }
 
+  let(:options) { { from: "foo@example.org", to: "bar@example.org", subject: "example" } }
+
   it "delivers a Mail" do
-    cell.deliver(from: "foo@example.org", to: "bar@example.org", subject: "example")
+    cell.deliver(options)
     expect(Mail::TestMailer.deliveries.count).to eq 1
     mail = Mail::TestMailer.deliveries.first
     expect(mail.from).to eq ["foo@example.org"]
