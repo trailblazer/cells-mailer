@@ -7,4 +7,8 @@ RSpec.configure do |config|
       delivery_method :test
     end
   end
+
+  config.after(:each) do
+    Mail::TestMailer.deliveries.clear
+  end
 end
