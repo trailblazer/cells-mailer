@@ -13,9 +13,9 @@ module Cell
 
     def process_mail_options(options)
       state = options.delete(:method) || :show
-      options[:to] = send(options[:to]) if options[:to].is_a? Symbol
-      options[:from] = send(options[:from]) if options[:from].is_a? Symbol
-      options[:subject] = send(options[:subject]) if options[:subject].is_a? Symbol
+      [:to, :subject, :from].each do |field|
+        options[field] = send(options[field]) if options[field].is_a? Symbol
+      end
       options[:body] ||= call(state)
       options
     end
