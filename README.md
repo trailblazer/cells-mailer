@@ -59,8 +59,4 @@ UserNotificationCell.(user).deliver(..., body: "Hello user")
 
 ## Roadmap
 
-- Allow instand methods as source for
-  - `from`
-  - `to`
-  - `subject`
 - Provide class level `mail` delivery configurations

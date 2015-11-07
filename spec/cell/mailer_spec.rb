@@ -22,6 +22,14 @@ class MailerCell < Cell::ViewModel
   end
 end
 
+class MailerCellWithConfig < MailerCell
+  mailer do
+    to "nick@trailblazer.to"
+    from "timo@schilling.io"
+    subject "you are a cool!"
+  end
+end
+
 RSpec.describe Cell::Mailer do
   subject(:cell) { MailerCell.(user) }
   subject(:mail) { Mail::TestMailer.deliveries.first }
@@ -73,5 +81,25 @@ RSpec.describe Cell::Mailer do
     mailer = double(deliver: true)
     expect(Mail).to receive(:new).with(kind_of(Hash)).and_return(mailer)
     cell.deliver
+  end
+
+  it "allows class level configurations" do
+    expect(MailerCellWithConfig.to).to eq "nick@trailblazer.to"
+    expect(MailerCellWithConfig.from).to eq "timo@schilling.io"
+    expect(MailerCellWithConfig.subject).to eq "you are a cool!"
+  end
+
+  it "use class level settings" do
+    MailerCellWithConfig.new(nil).deliver
+    expect(mail.to).to eq ["nick@trailblazer.to"]
+    expect(mail.from).to eq ["timo@schilling.io"]
+    expect(mail.subject).to eq "you are a cool!"
+  end
+
+  it "use class level settings only if no instance setting is present" do
+    MailerCellWithConfig.new(nil).deliver(to: "nick@apotomo.de")
+    expect(mail.to).to eq ["nick@apotomo.de"]
+    expect(mail.from).to eq ["timo@schilling.io"]
+    expect(mail.subject).to eq "you are a cool!"
   end
 end
