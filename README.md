@@ -34,6 +34,23 @@ end
 UserNotificationCell.(user).deliver(from: "foo@example.com", to: user.email, subject: "Hello")
 ```
 
+### Body
+
+Equal to Cells, you can deliver (render) different states of your Cell:
+
+```ruby
+class UserNotificationCell < Cell::ViewModel
+  include Cell::Mailer
+  property :user_name
+
+  def welcome
+    "Hello #{user_name}"
+  end
+end
+
+UserNotificationCell.(user).deliver(from: "...", to: "...", subject: "...", method: :welcome)
+```
+
 ## Roadmap
 
 - Allow instand methods as source for
