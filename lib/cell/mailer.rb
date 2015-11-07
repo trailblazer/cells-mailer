@@ -12,6 +12,9 @@ module Cell
     private
 
     def process_mail_options(options)
+      if options[:body] && options[:method]
+        raise ArgumentError, "You can't pass in `:method` and `:body` at once!"
+      end
       state = options.delete(:method) || :show
       [:to, :subject, :from].each do |field|
         options[field] = send(options[field]) if options[field].is_a? Symbol

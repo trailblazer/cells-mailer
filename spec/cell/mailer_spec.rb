@@ -62,4 +62,10 @@ RSpec.describe Cell::Mailer do
     cell.deliver(options.merge(from: :instance_email))
     expect(mail.from).to eq ["nick@trailblazer.to"]
   end
+
+  it "raise an argument error if option `:body` and `:method` is passed in" do
+    expect {
+      cell.deliver(options.merge(method: :a_method, body: "a body"))
+    }.to raise_exception ArgumentError, "You can't pass in `:method` and `:body` at once!"
+  end
 end
