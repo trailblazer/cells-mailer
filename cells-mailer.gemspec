@@ -9,8 +9,8 @@ Gem::Specification.new do |spec|
   spec.authors       = ["Timo Schilling"]
   spec.email         = ["timo@schilling.io"]
 
-  spec.summary       = %q{A Cells based mailer}
-  spec.description   = %q{A Cells based mailer}
+  spec.summary       = %q{Provides mail functionality for the Cells gem}
+  spec.description   = %q{Provides mail functionality for the Cells gem}
   spec.homepage      = "http://github.com/timoschilling/cells-mailer"
 
   spec.files         = `git ls-files -z`.split("\x0").reject { |f| f.match(%r{^(test|spec|features)/}) }
