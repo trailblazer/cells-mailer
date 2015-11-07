@@ -6,8 +6,8 @@ module Cell
   module Mailer
     def deliver(options)
       state = options.delete(:method) || :show
+      options[:body] = call(state)
       mail = Mail.new options
-      mail.body call(state)
       mail.deliver
     end
   end
