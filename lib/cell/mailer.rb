@@ -28,6 +28,10 @@ module Cell
         options[field] ||= self.class.send(field)
       end
 
+      (self.class.mail_options || {}).each do |key, value|
+        options[key] = value
+      end
+
       state = options.delete(:method) || :show
       options[:body] ||= call(state)
 
@@ -40,6 +44,7 @@ module Cell
         base.inheritable_attr :to
         base.inheritable_attr :from
         base.inheritable_attr :subject
+        base.inheritable_attr :mail_options
       end
 
       def mailer(&block)

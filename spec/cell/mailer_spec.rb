@@ -30,6 +30,12 @@ class MailerCellWithConfig < MailerCell
   end
 end
 
+class MailConfigurationCell < MailerCell
+  mailer do
+    mail_options delivery_method: :smtp, foo: :bar
+  end
+end
+
 RSpec.describe Cell::Mailer do
   subject(:cell) { MailerCell.(user) }
   subject(:mail) { Mail::TestMailer.deliveries.first }
@@ -101,5 +107,11 @@ RSpec.describe Cell::Mailer do
     expect(mail.to).to eq ["nick@apotomo.de"]
     expect(mail.from).to eq ["timo@schilling.io"]
     expect(mail.subject).to eq "you are a cool!"
+  end
+
+  it "allows class level `Mail` configuration" do
+    mailer = double(deliver: true)
+    expect(Mail).to receive(:new).with(hash_including(delivery_method: :smtp, foo: :bar)).and_return(mailer)
+    MailConfigurationCell.(nil).deliver
   end
 end

@@ -58,5 +58,3 @@ UserNotificationCell.(user).deliver(..., body: "Hello user")
 ```
 
 ## Roadmap
-
-- Provide class level `mail` delivery configurations
