@@ -97,3 +97,5 @@ UserNotificationCell.(user).deliver(to: "timo@schilling.io")
 This configurations will be inherited.
 
 ## Roadmap
+
+* making a real config object
