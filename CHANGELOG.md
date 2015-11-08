@@ -1,5 +1,10 @@
 # Changelog
 
+## v0.4.0 [☰](https://github.com/timoschilling/cells-mailer/compare/v0.3.0...v0.4.0)
+
+* global configuration
+* inherited configuration
+
 ## v0.3.0 [☰](https://github.com/timoschilling/cells-mailer/compare/v0.2.0...v0.3.0)
 
 * class level options
