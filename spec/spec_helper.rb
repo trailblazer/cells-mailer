@@ -10,6 +10,7 @@ RSpec.configure do |config|
 
   config.after(:each) do
     Mail::TestMailer.deliveries.clear
+    Cell::Mailer.clear_configuration!
   end
 
   # These three settings work together to allow you to limit a spec run to

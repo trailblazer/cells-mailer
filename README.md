@@ -16,9 +16,21 @@ And then execute:
 
 ## Configuration
 
-Cells::Mailer don't provide a global delivery configuration at the moment. 
-You can configure the `deliver_method` of `Mail` per [class level](#class-level-configurations) or take a look 
-at the [mail](https://github.com/mikel/mail) gem for any other configuration options.
+### Global configuration
+
+```ruby
+Cell::Mailer.configure do
+  to "nick@trailblazer.to"
+  from "timo@schilling.io"
+  subject "Nick ruls!"
+  mail_options deliver_method: :smtp
+end
+```
+`mail_options` will be passed to the `Mail` gem, for details take a look on the [Mail](https://github.com/mikel/mail) gem.
+
+### Context configuration
+
+See next chapter.
 
 ## Usage
 

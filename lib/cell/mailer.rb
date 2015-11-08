@@ -1,4 +1,5 @@
 require "cells"
+require "cell/mailer/configuration"
 require "cell/mailer/version"
 require "mail"
 
@@ -6,6 +7,18 @@ module Cell
   module Mailer
     def self.included(base)
       base.extend ClassMethods
+    end
+
+    def self.configure(&block)
+      configuration.instance_eval &block
+    end
+
+    def self.configuration
+      @configuration ||= Cell::Mailer::Configuration.new
+    end
+
+    def self.clear_configuration!
+      @configuration = nil
     end
 
     def deliver(options = {})
@@ -25,10 +38,10 @@ module Cell
       end
 
       [:to, :subject, :from].each do |field|
-        options[field] ||= self.class.send(field)
+        options[field] ||= self.class.mailer.send(field)
       end
 
-      (self.class.mail_options || {}).each do |key, value|
+      (self.class.mailer.mail_options || {}).each do |key, value|
         options[key] = value
       end
 
@@ -39,27 +52,19 @@ module Cell
     end
 
     module ClassMethods
-      def self.extended(base)
-        base.extend Uber::InheritableAttr
-        base.inheritable_attr :to
-        base.inheritable_attr :from
-        base.inheritable_attr :subject
-        base.inheritable_attr :mail_options
-      end
-
       def mailer(&block)
-        tap &block
+        mailer_configuration.instance_eval &block if block
+        mailer_configuration
       end
 
-      def inheritable_attr(name, options={})
-        super
-        instance_eval %Q{
-          def #{name}(value = :__undefined)
-            return self.#{name} = value if value != :__undefined
-            return @#{name} if instance_variable_defined?(:@#{name})
-            @#{name} = Uber::InheritableAttribute.inherit_for(self, :#{name}, #{options})
-          end
-        }
+      private
+
+      def mailer_configuration
+        @mailer_configuration ||= Cell::Mailer.configuration.clone
+      end
+
+      def inherited(child)
+        child.instance_variable_set(:@mailer_configuration, mailer_configuration.clone)
       end
     end
   end

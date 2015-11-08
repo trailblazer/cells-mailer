@@ -90,9 +90,9 @@ RSpec.describe Cell::Mailer do
   end
 
   it "allows class level configurations" do
-    expect(MailerCellWithConfig.to).to eq "nick@trailblazer.to"
-    expect(MailerCellWithConfig.from).to eq "timo@schilling.io"
-    expect(MailerCellWithConfig.subject).to eq "you are a cool!"
+    expect(MailerCellWithConfig.mailer.to).to eq "nick@trailblazer.to"
+    expect(MailerCellWithConfig.mailer.from).to eq "timo@schilling.io"
+    expect(MailerCellWithConfig.mailer.subject).to eq "you are a cool!"
   end
 
   it "use class level settings" do
@@ -113,5 +113,77 @@ RSpec.describe Cell::Mailer do
     mailer = double(deliver: true)
     expect(Mail).to receive(:new).with(hash_including(delivery_method: :smtp, foo: :bar)).and_return(mailer)
     MailConfigurationCell.(nil).deliver
+  end
+
+  it "has a configuration" do
+    expect(MailerCell.mailer).to be_a Cell::Mailer::Configuration
+  end
+
+  it "configuration is cached" do
+    expect(MailerCell.mailer).to be MailerCell.mailer
+  end
+
+  it "inherits the configuration" do
+    MailerCell.mailer.to = "nick@trailblazer.to"
+    class SubMailerCell < MailerCell; end
+    expect(SubMailerCell.mailer).to_not be MailerCell.mailer
+    expect(SubMailerCell.mailer.to).to eq MailerCell.mailer.to
+  end
+
+  it "allows global configuration" do
+    Cell::Mailer.configure do
+      to "nick@trailblazer.to"
+      from "timo@schilling.io"
+    end
+    expect(Cell::Mailer.configuration.to).to eq "nick@trailblazer.to"
+    expect(Cell::Mailer.configuration.from).to eq "timo@schilling.io"
+  end
+
+  it "clears the configuration" do
+    Cell::Mailer.configure do
+      to "nick@trailblazer.to"
+    end
+    expect(Cell::Mailer.configuration.to).to eq "nick@trailblazer.to"
+    Cell::Mailer.clear_configuration!
+    expect(Cell::Mailer.configuration.to).to eq nil
+  end
+
+  it "inherits configuration from global configuration, class configuration and instance configuration" do
+    Cell::Mailer.configure do
+      from "timo@schilling.io"
+    end
+    expect(Cell::Mailer.configuration.from).to eq "timo@schilling.io"
+
+    class ConfigMailerCell < Cell::ViewModel
+      include Cell::Mailer
+      def show
+        "body"
+      end
+    end
+
+    class InheritMailerCell < ConfigMailerCell
+      mailer do
+        mail_options delivery_method: :post
+        subject "should not be used"
+      end
+    end
+    expect(InheritMailerCell.mailer.from).to eq "timo@schilling.io"
+    expect(InheritMailerCell.mailer.subject).to eq "should not be used"
+    expect(InheritMailerCell.mailer.mail_options).to eq(delivery_method: :post)
+
+    class SubInheritMailerCell < InheritMailerCell
+      mailer do
+        to "nick@trailblazer.to"
+      end
+    end
+    expect(SubInheritMailerCell.mailer.to).to eq "nick@trailblazer.to"
+    expect(SubInheritMailerCell.mailer.from).to eq "timo@schilling.io"
+    expect(SubInheritMailerCell.mailer.subject).to eq "should not be used"
+    expect(SubInheritMailerCell.mailer.mail_options).to eq(delivery_method: :post)
+
+    args = { subject: "Nick ruls!", to: "nick@trailblazer.to", from: "timo@schilling.io", delivery_method: :post, body: "body" }
+
+    expect(Mail).to receive(:new).with(args).and_return(double(deliver: true))
+    SubInheritMailerCell.(nil).deliver subject: "Nick ruls!"
   end
 end
