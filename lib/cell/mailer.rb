@@ -22,11 +22,22 @@ module Cell
     end
 
     def deliver(options = {})
-      mail = Mail.new process_mail_options(options)
-      mail.deliver
+      build_mail(options).deliver
     end
 
     private
+
+    def build_mail(options)
+      options, delivery_method = process_mail_options(options)
+
+      mail = Mail.new options
+      mail.delivery_method *delivery_method
+      mail
+    end
+
+    def mail_delivery_method
+      self.class.mailer.mail_options[:delivery_method]
+    end
 
     def process_mail_options(options)
       if options[:body] && options[:method]
@@ -41,14 +52,14 @@ module Cell
         options[field] ||= self.class.mailer.send(field)
       end
 
-      (self.class.mailer.mail_options || {}).each do |key, value|
+      self.class.mailer.mail_options.each do |key, value|
         options[key] = value
       end
 
       state = options.delete(:method) || :show
       options[:body] ||= call(state)
 
-      options
+      [options, options.delete(:delivery_method)]
     end
 
     module ClassMethods
