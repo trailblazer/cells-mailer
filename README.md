@@ -110,4 +110,5 @@ This configurations will be inherited.
 
 ## Roadmap
 
-* making a real config object
+* multipart emails
+* attachments
