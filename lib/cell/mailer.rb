@@ -46,6 +46,7 @@ module Cell
 
       [:to, :from, :subject].each do |field|
         options[field] ||= self.class.mailer.send(field)
+        # TODO: this should be happen via inheritence inside of Configuration
         options[field] ||= Cell::Mailer.configuration.send(field)
         options[field] = send(options[field]) if options[field].is_a? Symbol
       end
