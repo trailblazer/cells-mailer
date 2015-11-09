@@ -4,4 +4,4 @@ source 'https://rubygems.org'
 gemspec
 
 gem "guard-rspec"
-gem "pry"
+gem "pry-plusplus"
