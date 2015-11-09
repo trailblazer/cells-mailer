@@ -45,11 +45,8 @@ module Cell
       end
 
       [:to, :subject, :from].each do |field|
-        options[field] = send(options[field]) if options[field].is_a? Symbol
-      end
-
-      [:to, :subject, :from].each do |field|
         options[field] ||= self.class.mailer.send(field)
+        options[field] = send(options[field]) if options[field].is_a? Symbol
       end
 
       self.class.mailer.mail_options.each do |key, value|

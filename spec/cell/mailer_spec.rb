@@ -164,29 +164,28 @@ RSpec.describe Cell::Mailer do
 
     class InheritMailerCell < ConfigMailerCell
       mailer do
-        mail_options delivery_method: [:post, location: "..."]
         subject "should not be used"
       end
     end
     expect(InheritMailerCell.mailer.from).to eq "timo@schilling.io"
     expect(InheritMailerCell.mailer.subject).to eq "should not be used"
-    expect(InheritMailerCell.mailer.mail_options).to eq(delivery_method: [:post, location: "..."])
 
     class SubInheritMailerCell < InheritMailerCell
       mailer do
-        to "nick@trailblazer.to"
+        to :to
+      end
+
+      def to
+        "nick@trailblazer.to"
       end
     end
-    expect(SubInheritMailerCell.mailer.to).to eq "nick@trailblazer.to"
+    expect(SubInheritMailerCell.mailer.to).to eq :to
     expect(SubInheritMailerCell.mailer.from).to eq "timo@schilling.io"
     expect(SubInheritMailerCell.mailer.subject).to eq "should not be used"
-    expect(SubInheritMailerCell.mailer.mail_options).to eq(delivery_method: [:post, location: "..."])
 
     args = { subject: "Nick ruls!", to: "nick@trailblazer.to", from: "timo@schilling.io", body: "body" }
 
-    mailer = double(deliver: true)
-    expect(mailer).to receive(:delivery_method).with(:post, location: "...")
-    expect(Mail).to receive(:new).with(args).and_return(mailer)
+    expect(Mail).to receive(:new).with(args).and_call_original
 
     SubInheritMailerCell.(nil).deliver subject: "Nick ruls!"
   end
