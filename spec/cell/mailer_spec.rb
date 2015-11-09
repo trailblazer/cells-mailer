@@ -215,10 +215,11 @@ RSpec.describe Cell::Mailer do
     expect(SubInheritMailerCell.mailer.to).to eq :to
     expect(SubInheritMailerCell.mailer.subject).to eq "should not be used"
 
-    args = { subject: "Nick ruls!", to: "nick@trailblazer.to", from: "timo@schilling.io", body: "body" }
-
-    expect(Mail).to receive(:new).with(args).and_call_original
-
     SubInheritMailerCell.(nil).deliver subject: "Nick ruls!"
+
+    expect(mail.to).to eq ["nick@trailblazer.to"]
+    expect(mail.from).to eq ["timo@schilling.io"]
+    expect(mail.subject).to eq "Nick ruls!"
+    expect(mail.body.raw_source).to eq "body"
   end
 end
