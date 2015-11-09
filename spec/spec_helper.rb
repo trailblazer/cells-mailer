@@ -1,5 +1,6 @@
 $LOAD_PATH.unshift File.expand_path('../../lib', __FILE__)
 require 'cell/mailer'
+require 'ostruct' # for mri 1.9 and rbx
 
 RSpec.configure do |config|
   config.before(:suite) do
