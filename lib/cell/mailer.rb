@@ -44,8 +44,9 @@ module Cell
         raise ArgumentError, "You can't pass in `:method` and `:body` at once!"
       end
 
-      [:to, :subject, :from].each do |field|
+      [:to, :from, :subject].each do |field|
         options[field] ||= self.class.mailer.send(field)
+        options[field] ||= Cell::Mailer.configuration.send(field)
         options[field] = send(options[field]) if options[field].is_a? Symbol
       end
 

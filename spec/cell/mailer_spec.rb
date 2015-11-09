@@ -159,6 +159,17 @@ RSpec.describe Cell::Mailer do
     expect(Cell::Mailer.configuration.from).to eq "timo@schilling.io"
   end
 
+  it "allows global configuration with instance methods as value" do
+    Cell::Mailer.configure do
+      to :to
+      from :from
+      subject :subject
+    end
+    expect(Cell::Mailer.configuration.to).to eq :to
+    expect(Cell::Mailer.configuration.from).to eq :from
+    expect(Cell::Mailer.configuration.subject).to eq :subject
+  end
+
   it "clears the configuration" do
     Cell::Mailer.configure do
       to "nick@trailblazer.to"
@@ -170,14 +181,18 @@ RSpec.describe Cell::Mailer do
 
   it "inherits configuration from global configuration, class configuration and instance configuration" do
     Cell::Mailer.configure do
-      from "timo@schilling.io"
+      from :from
     end
-    expect(Cell::Mailer.configuration.from).to eq "timo@schilling.io"
+    expect(Cell::Mailer.configuration.from).to eq :from
 
     class ConfigMailerCell < Cell::ViewModel
       include Cell::Mailer
       def show
         "body"
+      end
+
+      def from
+        "timo@schilling.io"
       end
     end
 
@@ -186,7 +201,6 @@ RSpec.describe Cell::Mailer do
         subject "should not be used"
       end
     end
-    expect(InheritMailerCell.mailer.from).to eq "timo@schilling.io"
     expect(InheritMailerCell.mailer.subject).to eq "should not be used"
 
     class SubInheritMailerCell < InheritMailerCell
@@ -199,7 +213,6 @@ RSpec.describe Cell::Mailer do
       end
     end
     expect(SubInheritMailerCell.mailer.to).to eq :to
-    expect(SubInheritMailerCell.mailer.from).to eq "timo@schilling.io"
     expect(SubInheritMailerCell.mailer.subject).to eq "should not be used"
 
     args = { subject: "Nick ruls!", to: "nick@trailblazer.to", from: "timo@schilling.io", body: "body" }
