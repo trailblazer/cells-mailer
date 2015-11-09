@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.4.1 [☰](https://github.com/timoschilling/cells-mailer/compare/v0.4.0...v0.4.1)
+
+* fix a bug with `delivery_method` handling
+
 ## v0.4.0 [☰](https://github.com/timoschilling/cells-mailer/compare/v0.3.0...v0.4.0)
 
 * global configuration
