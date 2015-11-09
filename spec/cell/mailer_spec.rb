@@ -30,6 +30,18 @@ class MailerCellWithConfig < MailerCell
   end
 end
 
+class MailerCellWithConfigAndInstanceMethod < MailerCell
+  mailer do
+    to "nick@trailblazer.to"
+    from "timo@schilling.io"
+    subject :subject
+  end
+
+  def subject
+    "Nick is cool!"
+  end
+end
+
 class MailConfigurationCell < MailerCell
   mailer do
     mail_options delivery_method: :smtp, foo: :bar
@@ -100,6 +112,13 @@ RSpec.describe Cell::Mailer do
     expect(mail.to).to eq ["nick@trailblazer.to"]
     expect(mail.from).to eq ["timo@schilling.io"]
     expect(mail.subject).to eq "you are a cool!"
+  end
+
+  it "use class level settings with instance methods" do
+    MailerCellWithConfigAndInstanceMethod.(nil).deliver
+    expect(mail.to).to eq ["nick@trailblazer.to"]
+    expect(mail.from).to eq ["timo@schilling.io"]
+    expect(mail.subject).to eq "Nick is cool!"
   end
 
   it "use class level settings only if no instance setting is present" do
