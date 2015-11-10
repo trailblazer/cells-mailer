@@ -55,6 +55,13 @@ module Cell
       state = options.delete(:method) || :show
       options[:body] ||= call(state)
 
+      options[:content_type] = case options.delete(:format) || :text
+      when :html
+        "text/html"
+      when :text
+        "text/plain"
+      end
+
       [options, options.delete(:delivery_method)]
     end
 

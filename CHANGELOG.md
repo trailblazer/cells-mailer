@@ -2,6 +2,7 @@
 
 ## v0.4.2 [☰](https://github.com/timoschilling/cells-mailer/compare/v0.4.1...v0.4.2)
 
+* support for setting one format (still no multiformat support yet)
 * fix a bug with fields via instance methods
 
 ## v0.4.1 [☰](https://github.com/timoschilling/cells-mailer/compare/v0.4.0...v0.4.1)

@@ -5,10 +5,12 @@ RSpec.describe Cell::Mailer::Configuration do
     config = Cell::Mailer::Configuration.new
     config.to = "to"
     config.from = "from"
+    config.format = :html
     config.subject = "subject"
     config.mail_options = "mail_options"
     expect(config.to).to eq "to"
     expect(config.from).to eq "from"
+    expect(config.format).to eq :html
     expect(config.subject).to eq "subject"
     expect(config.mail_options).to eq "mail_options"
   end

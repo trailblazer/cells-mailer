@@ -3,7 +3,7 @@ module Cell
     class Configuration
       class << self
         def attributes
-          { to: nil, from: nil, subject: nil, mail_options: {} }
+          { to: nil, from: nil, subject: nil, format: nil, mail_options: {} }
         end
       end
 
@@ -36,8 +36,6 @@ module Cell
         end
         self.class.new cloned_store
       end
-
-      private
 
       attr_reader :store
     end

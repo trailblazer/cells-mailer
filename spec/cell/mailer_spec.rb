@@ -30,6 +30,12 @@ class MailerCellWithConfig < MailerCell
   end
 end
 
+class HTMLMailerCell < MailerCellWithConfig
+  mailer do
+    format :html
+  end
+end
+
 class MailerCellWithConfigAndInstanceMethod < MailerCell
   mailer do
     to "nick@trailblazer.to"
@@ -96,7 +102,7 @@ RSpec.describe Cell::Mailer do
   end
 
   it "deliver options are optional" do
-    mailer = double(deliver: true, delivery_method: nil)
+    mailer = double(deliver: true, delivery_method: nil, :body= => true)
     expect(Mail).to receive(:new).with(kind_of(Hash)).and_return(mailer)
     cell.deliver
   end
@@ -129,7 +135,7 @@ RSpec.describe Cell::Mailer do
   end
 
   it "allows class level `Mail` configuration" do
-    mailer = double(deliver: true)
+    mailer = double(deliver: true, :body= => true)
     expect(mailer).to receive(:delivery_method).with(:smtp)
     expect(Mail).to receive(:new).with(hash_including(foo: :bar)).and_return(mailer)
     MailConfigurationCell.(nil).deliver
@@ -199,6 +205,7 @@ RSpec.describe Cell::Mailer do
     class InheritMailerCell < ConfigMailerCell
       mailer do
         subject "should not be used"
+        mail_options delivery_method: :test
       end
     end
     expect(InheritMailerCell.mailer.subject).to eq "should not be used"
@@ -220,6 +227,20 @@ RSpec.describe Cell::Mailer do
     expect(mail.to).to eq ["nick@trailblazer.to"]
     expect(mail.from).to eq ["timo@schilling.io"]
     expect(mail.subject).to eq "Nick ruls!"
+    expect(mail.body.raw_source).to eq "body"
+  end
+
+  it "allows setting text as mail format (default)" do
+    MailerCellWithConfig.(user).deliver
+
+    expect(mail.content_type).to eq "text/plain; charset=UTF-8"
+    expect(mail.body.raw_source).to eq "body"
+  end
+
+  it "allows setting html as mail format" do
+    HTMLMailerCell.(user).deliver format: :html
+
+    expect(mail.content_type).to eq "text/html; charset=UTF-8"
     expect(mail.body.raw_source).to eq "body"
   end
 end

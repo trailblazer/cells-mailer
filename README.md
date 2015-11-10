@@ -100,6 +100,7 @@ class UserNotificationCell < Cell::ViewModel
     from "nick@trailblazer.to"
     subject "nick loves good code!"
     mail_options delivery_method: :smtp
+    format :html # or :text
   end
 end
 
