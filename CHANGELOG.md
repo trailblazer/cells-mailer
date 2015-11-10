@@ -1,6 +1,6 @@
 # Changelog
 
-## v0.4.2 [☰](https://github.com/timoschilling/cells-mailer/compare/v0.4.1...v0.4.2)
+## v0.5.0 [☰](https://github.com/timoschilling/cells-mailer/compare/v0.4.1...v0.5.0)
 
 * support for setting one format (still no multiformat support yet)
 * fix a bug with fields via instance methods
