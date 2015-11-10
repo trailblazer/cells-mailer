@@ -35,10 +35,6 @@ module Cell
       mail
     end
 
-    def mail_delivery_method
-      self.class.mailer.mail_options[:delivery_method]
-    end
-
     def process_mail_options(options)
       if options[:body] && options[:method]
         raise ArgumentError, "You can't pass in `:method` and `:body` at once!"
